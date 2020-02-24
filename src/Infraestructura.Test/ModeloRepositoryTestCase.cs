@@ -2,7 +2,9 @@ using Base.Test;
 using Entidades;
 using FluentAssertions;
 using Infraestructura.Impl;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.IO;
 using System.Linq;
@@ -12,6 +14,18 @@ namespace Infraestructura.Test
     [TestClass]
     public class ModeloRepositoryTestCase : BaseRepositoryTestCase<Modelo>
     {
+        public static ILogger<ModeloRepository> Logger { get; private set; }
+        public static IAppSettings AppSettings { get; private set; }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            Logger = new Mock<ILogger<ModeloRepository>>().Object;
+            var appSettings = new Mock<IAppSettings>();
+            appSettings.Setup(mock => mock.JsonStorageFilePath).Returns(Path.Combine("Datos", "emptyModels.json"));
+            AppSettings = appSettings.Object;
+        }
+
         [TestMethod]
         public void NoExisteModelo_Save_SeGuardaModelo()
         {
@@ -26,7 +40,7 @@ namespace Infraestructura.Test
         public void ModeloCreado_Search_SeGuardaModelo()
         {
             var modeloPorPersistir = CreateEntity();
-            using var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json"));
+            using var repository = new ModeloRepository(AppSettings, Logger);
             var modelos = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre);
             modelos.Should().HaveCount(1);
             AreEquals(modeloPorPersistir, modelos.First());
@@ -37,14 +51,14 @@ namespace Infraestructura.Test
         {
             var modeloPorPersistir = CreateEntity();
             const string valorActualizado = "v2.0";
-            using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
+            using (var repository = new ModeloRepository(AppSettings, Logger))
             {
                 var modeloPorActualizar = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).First();
                 modeloPorActualizar.VersionSoftware = valorActualizado;
                 repository.Update(modeloPorActualizar);
             }
 
-            using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
+            using (var repository = new ModeloRepository(AppSettings, Logger))
             {
                 var modeloActualizado = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).First();
                 modeloActualizado.VersionSoftware.Should().Be(valorActualizado);
@@ -55,13 +69,13 @@ namespace Infraestructura.Test
         public void ModeloCreado_Borrar_ObtenerModelo_NoDevuelveModelo()
         {
             var modeloPorPersistir = CreateEntity();
-            using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
+            using (var repository = new ModeloRepository(AppSettings, Logger))
             {
                 var modeloPorRemover = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).First();
                 repository.Delete(modeloPorRemover);
             }
 
-            using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
+            using (var repository = new ModeloRepository(AppSettings, Logger))
             {
                 var modeloActualizado = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).Should().BeEmpty();
             }
@@ -70,7 +84,7 @@ namespace Infraestructura.Test
         [TestMethod]
         public void ModeloInexistente_ObtenerModelo_NoDevuelveModelo()
         {
-            using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
+            using (var repository = new ModeloRepository(AppSettings, Logger))
             {
                 var modeloActualizado = repository.Search(m => m.Nombre == Guid.NewGuid().ToString()).Should().BeEmpty();
             }
@@ -79,7 +93,8 @@ namespace Infraestructura.Test
         [TestMethod]
         public void ModeloCreadoEnArchivoEjemplo_ObtenerModelo_DevuelveModelo()
         {
-            using var repository = new ModeloRepository(Path.Combine("Datos", "testModels.json"));
+            Mock<IAppSettings> appSettings = CreateTestModelAppSettings();
+            using var repository = new ModeloRepository(appSettings.Object, Logger);
             repository.Search(m => m.Nombre == "DPC9989").Should().NotBeEmpty();
             repository.Search(m => m.Nombre == "DPC3825").Should().NotBeEmpty();
         }
@@ -87,17 +102,13 @@ namespace Infraestructura.Test
         [TestMethod]
         public void ModeloInexistenteEnArchivoEjemplo_ObtenerModelo_NoDevuelveModelo()
         {
-            using var repository = new ModeloRepository(Path.Combine("Datos", "testModels.json"));
+            Mock<IAppSettings> appSettings = CreateTestModelAppSettings();
+            using var repository = new ModeloRepository(appSettings.Object, Logger);
             repository.Search(m => m.Nombre == "DPC381125").Should().BeEmpty();
         }
 
 
         public override Modelo CreateEntity()
-        {
-            return CreateEntity("emptyModels.json");
-        }
-
-        private static Modelo CreateEntity(string filePath)
         {
             var modelo = new Modelo()
             {
@@ -105,8 +116,17 @@ namespace Infraestructura.Test
                 VersionSoftware = "v1.0",
                 Fabricante = "Cisco"
             };
-            var repository = new ModeloRepository(Path.Combine("Datos", filePath));
+
+            var repository = new ModeloRepository(AppSettings, Logger);
             return repository.Save(modelo);
         }
+
+        private static Mock<IAppSettings> CreateTestModelAppSettings()
+        {
+            var appSettings = new Mock<IAppSettings>();
+            appSettings.Setup(mock => mock.JsonStorageFilePath).Returns(Path.Combine("Datos", "testModels.json"));
+            return appSettings;
+        }
+
     }
 }
