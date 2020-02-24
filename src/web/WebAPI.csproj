@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\Entidades\Entidades.csproj" />
     <ProjectReference Include="..\Infraestructura.Impl\Infraestructura.Impl.csproj" />
     <ProjectReference Include="..\Infraestructura\Infraestructura.csproj" />
+    <ProjectReference Include="..\InyeccionDependencias\InyeccionDependencias.csproj" />
   </ItemGroup>
 
 </Project>
