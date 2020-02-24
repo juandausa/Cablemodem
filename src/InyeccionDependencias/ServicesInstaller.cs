@@ -8,7 +8,6 @@ namespace InyeccionDependencias
     {
         public static void Install(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<ICablemodemRepository, CablemodemRepository>();
         }
     }
