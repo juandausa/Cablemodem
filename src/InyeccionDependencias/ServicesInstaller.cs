@@ -1,6 +1,8 @@
 ﻿using Infraestructura;
 using Infraestructura.Impl;
 using Microsoft.Extensions.DependencyInjection;
+using Servicios;
+using Servicios.Impl;
 
 namespace InyeccionDependencias
 {
@@ -10,6 +12,7 @@ namespace InyeccionDependencias
         {
             serviceCollection.AddScoped<ICablemodemRepository, CablemodemRepository>();
             serviceCollection.AddScoped<IModeloRepository, ModeloRepository>();
+            serviceCollection.AddScoped<ICablemodemService, CablemodemService>();
         }
     }
 }
