@@ -30,6 +30,45 @@ namespace Infraestructura.Test
             };
         }
 
+        [TestMethod]
+        public void CablemodemCreado_ActualizarParametro_ObtenerCablemodem_DevuelveParametroActualizado()
+        {
+            var cablemodemToPersist = CreateEntity();
+            using (var context = new CablemodemContext(Options))
+            {
+                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip).First();
+                cablemodem.Fabricante = "Cisco";
+                reporitory.Update(cablemodem);
+            };
+
+            using (var context = new CablemodemContext(Options))
+            {
+                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip).First();
+                cablemodem.Fabricante.Should().Be("Cisco");
+            };
+        }
+
+        [TestMethod]
+        public void CablemodemCreado_Borrar_ObtenerCablemodem_NoDevuelveCablemodem()
+        {
+            var cablemodemToPersist = CreateEntity();
+            using (var context = new CablemodemContext(Options))
+            {
+                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip).First();
+                reporitory.Delete(cablemodem);
+            };
+
+            using (var context = new CablemodemContext(Options))
+            {
+                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip);
+                cablemodem.Should().BeEmpty();
+            };
+        }
+
         public override Cablemodem CreateEntity()
         {
             var cablemodem = new Cablemodem()
