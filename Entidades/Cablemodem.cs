@@ -22,5 +22,10 @@
         /// Versión del software.
         /// </summary>
         public string VersionSoftware { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("MacAddress: {0}, IP: {1}, Modelo: {2}, Fabricate: {3}, VersionSoftware: {4}", this.MacAddress, this.Ip, this.Modelo, this.Fabricante, this.VersionSoftware);
+        }
     }
 }

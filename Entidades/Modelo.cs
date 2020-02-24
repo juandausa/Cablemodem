@@ -22,5 +22,10 @@ namespace Entidades
         /// </summary>
         [JsonProperty("soft")]
         public string VersionSoftware { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Fabricate: {0}, Nombre: {1}, VersionSoftware: {2}", this.Fabricante, this.Nombre, this.VersionSoftware);
+        }
     }
 }

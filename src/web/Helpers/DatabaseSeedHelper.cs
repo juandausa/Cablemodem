@@ -15,14 +15,14 @@ namespace WebAPI.Helpers
             using (var scope = host.Services.CreateScope())
             {
                 var log = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
+                var appSettings = scope.ServiceProvider.GetRequiredService<IAppSettings>();
                 using (var appContext = scope.ServiceProvider.GetRequiredService<CablemodemContext>())
                 {
                     try
                     {
-                        //// TODO: Obtener desde configuración.
                         log.LogDebug("Ejecutando seed de base de datos");
                         appContext.Database.BeginTransaction();
-                        var commandText = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Datos", "modems.sql"));
+                        var commandText = File.ReadAllText(appSettings.SqlSeedFilePath);
                         appContext.Database.ExecuteSqlRaw(commandText);
                         appContext.Database.CommitTransaction();
                     }
