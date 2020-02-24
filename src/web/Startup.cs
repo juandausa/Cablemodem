@@ -1,5 +1,5 @@
 using Infraestructura;
-using Infraestructura.Impl;
+using InyeccionDependencias;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +32,7 @@ namespace WebAPI
 
             services.AddControllers();
             services.AddMvc();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.Install();
             services.AddDbContext<CablemodemContext>(o => o.UseInMemoryDatabase(Configuration.GetConnectionString("InMemory")));
         }
 
