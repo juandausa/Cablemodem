@@ -3,6 +3,7 @@ using Entidades;
 using FluentAssertions;
 using Infraestructura.Impl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 
 namespace Infraestructura.Test
@@ -11,7 +12,7 @@ namespace Infraestructura.Test
     public class CablemodemRepositoryTestCase : BaseRepositoryTestCase<Cablemodem>
     {
         [TestMethod]
-        public void NoCablemodem_Save_SeGuardaClave()
+        public void NoExisteCablemodem_Save_SeGuardaClave()
         {
             var cablemodemToPersist = CreateEntity();
             cablemodemToPersist.Ip.Should().NotBeNullOrEmpty();
@@ -27,6 +28,16 @@ namespace Infraestructura.Test
                 var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip);
                 cablemodem.Should().HaveCount(1);
                 this.AreEquals(cablemodemToPersist, cablemodem.First());
+            };
+        }
+
+        [TestMethod]
+        public void CablemodemInexistente_Search_NoDevuelveCablemodem()
+        {
+            using (var context = new CablemodemContext(Options))
+            {
+                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                var cablemodem = reporitory.Search(c => c.Ip == Guid.NewGuid().ToString()).Should().BeEmpty();
             };
         }
 
