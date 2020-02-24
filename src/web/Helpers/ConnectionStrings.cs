@@ -1,4 +1,4 @@
-﻿namespace WebAPI.ViewModels
+﻿namespace WebAPI.Helpers
 {
     public class ConnectionStrings
     {

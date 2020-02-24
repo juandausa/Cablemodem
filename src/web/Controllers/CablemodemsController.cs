@@ -7,10 +7,10 @@ namespace WebAPI.Controllers
 {
     [Route("api/cablemodems")]
     [ApiController]
-    public class CablemodemController : ControllerBase
+    public class CablemodemsController : ControllerBase
     {
         private readonly ICablemodemRepository CablemodemRepository;
-        public CablemodemController(ICablemodemRepository CablemodemRepository)
+        public CablemodemsController(ICablemodemRepository CablemodemRepository)
         {
             this.CablemodemRepository = CablemodemRepository;
         }
