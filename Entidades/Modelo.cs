@@ -1,18 +1,26 @@
-﻿namespace Entidades
+﻿using Newtonsoft.Json;
+
+namespace Entidades
 {
+    [JsonObject("models")]
     public class Modelo
     {
         /// <summary>
         /// Fabricante
         /// </summary>
-        public string Vendor { get; set; }
+        [JsonProperty("vendor")]
+        public string Fabricante { get; set; }
+
         /// <summary>
         /// Nombre del modelo
         /// </summary>
-        public string Name { get; set; }
+        [JsonProperty("name")]
+        public string Nombre { get; set; }
+
         /// <summary>
         /// Versión del software
         /// </summary>
-        public string Soft { get; set; }
+        [JsonProperty("soft")]
+        public string VersionSoftware { get; set; }
     }
 }

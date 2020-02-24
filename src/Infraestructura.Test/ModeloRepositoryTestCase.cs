@@ -17,9 +17,9 @@ namespace Infraestructura.Test
         {
             var modeloPorPersistir = CreateEntity();
             modeloPorPersistir.Should().NotBeNull();
-            modeloPorPersistir.Name.Should().NotBeNullOrEmpty();
-            modeloPorPersistir.Vendor.Should().NotBeNullOrEmpty();
-            modeloPorPersistir.Soft.Should().NotBeNullOrEmpty();
+            modeloPorPersistir.Nombre.Should().NotBeNullOrEmpty();
+            modeloPorPersistir.Fabricante.Should().NotBeNullOrEmpty();
+            modeloPorPersistir.VersionSoftware.Should().NotBeNullOrEmpty();
         }
 
         [TestMethod]
@@ -27,7 +27,7 @@ namespace Infraestructura.Test
         {
             var modeloPorPersistir = CreateEntity();
             using var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json"));
-            var modelos = repository.Search(m => m.Name == modeloPorPersistir.Name);
+            var modelos = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre);
             modelos.Should().HaveCount(1);
             AreEquals(modeloPorPersistir, modelos.First());
         }
@@ -39,15 +39,15 @@ namespace Infraestructura.Test
             const string valorActualizado = "v2.0";
             using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
             {
-                var modeloPorActualizar = repository.Search(m => m.Name == modeloPorPersistir.Name).First();
-                modeloPorActualizar.Soft = valorActualizado;
+                var modeloPorActualizar = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).First();
+                modeloPorActualizar.VersionSoftware = valorActualizado;
                 repository.Update(modeloPorActualizar);
             }
 
             using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
             {
-                var modeloActualizado = repository.Search(m => m.Name == modeloPorPersistir.Name).First();
-                modeloActualizado.Soft.Should().Be(valorActualizado);
+                var modeloActualizado = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).First();
+                modeloActualizado.VersionSoftware.Should().Be(valorActualizado);
             }
         }
 
@@ -57,13 +57,13 @@ namespace Infraestructura.Test
             var modeloPorPersistir = CreateEntity();
             using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
             {
-                var modeloPorRemover = repository.Search(m => m.Name == modeloPorPersistir.Name).First();
+                var modeloPorRemover = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).First();
                 repository.Delete(modeloPorRemover);
             }
 
             using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
             {
-                var modeloActualizado = repository.Search(m => m.Name == modeloPorPersistir.Name).Should().BeEmpty();
+                var modeloActualizado = repository.Search(m => m.Nombre == modeloPorPersistir.Nombre).Should().BeEmpty();
             }
         }
 
@@ -72,9 +72,25 @@ namespace Infraestructura.Test
         {
             using (var repository = new ModeloRepository(Path.Combine("Datos", "emptyModels.json")))
             {
-                var modeloActualizado = repository.Search(m => m.Name == Guid.NewGuid().ToString()).Should().BeEmpty();
+                var modeloActualizado = repository.Search(m => m.Nombre == Guid.NewGuid().ToString()).Should().BeEmpty();
             }
         }
+
+        [TestMethod]
+        public void ModeloCreadoEnArchivoEjemplo_ObtenerModelo_DevuelveModelo()
+        {
+            using var repository = new ModeloRepository(Path.Combine("Datos", "testModels.json"));
+            repository.Search(m => m.Nombre == "DPC9989").Should().NotBeEmpty();
+            repository.Search(m => m.Nombre == "DPC3825").Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public void ModeloInexistenteEnArchivoEjemplo_ObtenerModelo_NoDevuelveModelo()
+        {
+            using var repository = new ModeloRepository(Path.Combine("Datos", "testModels.json"));
+            repository.Search(m => m.Nombre == "DPC381125").Should().BeEmpty();
+        }
+
 
         public override Modelo CreateEntity()
         {
@@ -85,9 +101,9 @@ namespace Infraestructura.Test
         {
             var modelo = new Modelo()
             {
-                Name = Guid.NewGuid().ToString(),
-                Soft = "v1.0",
-                Vendor = "Cisco"
+                Nombre = Guid.NewGuid().ToString(),
+                VersionSoftware = "v1.0",
+                Fabricante = "Cisco"
             };
             var repository = new ModeloRepository(Path.Combine("Datos", filePath));
             return repository.Save(modelo);
