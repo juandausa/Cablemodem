@@ -2,7 +2,9 @@ using Base.Test;
 using Entidades;
 using FluentAssertions;
 using Infraestructura.Impl;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Linq;
 
@@ -11,6 +13,14 @@ namespace Infraestructura.Test
     [TestClass]
     public class CablemodemRepositoryTestCase : BaseRepositoryTestCase<Cablemodem>
     {
+        public static ILogger<CablemodemRepository> Logger { get; private set; }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            Logger = new Mock<ILogger<CablemodemRepository>>().Object;
+        }
+
         [TestMethod]
         public void NoExisteCablemodem_Save_SeGuardaClave()
         {
@@ -24,7 +34,7 @@ namespace Infraestructura.Test
             var cablemodemPorPersistir = CreateEntity();
             using (var context = new CablemodemContext(Options))
             {
-                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
                 var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip);
                 cablemodem.Should().HaveCount(1);
                 this.AreEquals(cablemodemPorPersistir, cablemodem.First());
@@ -36,7 +46,7 @@ namespace Infraestructura.Test
         {
             using (var context = new CablemodemContext(Options))
             {
-                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
                 var cablemodem = reporitory.Search(c => c.Ip == Guid.NewGuid().ToString()).Should().BeEmpty();
             };
         }
@@ -47,7 +57,7 @@ namespace Infraestructura.Test
             var cablemodemPorPersistir = CreateEntity();
             using (var context = new CablemodemContext(Options))
             {
-                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
                 var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip).First();
                 cablemodem.Fabricante = "Cisco";
                 reporitory.Update(cablemodem);
@@ -55,7 +65,7 @@ namespace Infraestructura.Test
 
             using (var context = new CablemodemContext(Options))
             {
-                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
                 var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip).First();
                 cablemodem.Fabricante.Should().Be("Cisco");
             };
@@ -67,14 +77,14 @@ namespace Infraestructura.Test
             var cablemodemPorPersistir = CreateEntity();
             using (var context = new CablemodemContext(Options))
             {
-                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
                 var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip).First();
                 reporitory.Delete(cablemodem);
             };
 
             using (var context = new CablemodemContext(Options))
             {
-                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
                 var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip);
                 cablemodem.Should().BeEmpty();
             };
@@ -93,7 +103,7 @@ namespace Infraestructura.Test
 
             using (var context = new CablemodemContext(Options))
             {
-                ICablemodemRepository reporitory = new CablemodemRepository(context);
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
                 reporitory.Save(cablemodem);
             }
 
