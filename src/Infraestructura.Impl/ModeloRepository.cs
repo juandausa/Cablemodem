@@ -1,9 +1,11 @@
 ﻿using Entidades;
 using JsonFlatFileDataStore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Infraestructura.Impl
 {
@@ -19,38 +21,38 @@ namespace Infraestructura.Impl
 
         public bool Any(Expression<Func<Modelo, bool>> expression)
         {
-            return store.GetCollection<Modelo>().Find(ConvertExpressionToPredicate(expression)).Any();
+            return store.GetCollection<Modelo>(GetCollectionName()).Find(ConvertExpressionToPredicate(expression)).Any();
         }
 
         public void Delete(Modelo entity)
         {
-            store.GetCollection<Modelo>().DeleteOne(m => m.Name == entity.Name);
+            store.GetCollection<Modelo>(GetCollectionName()).DeleteOne(m => m.Nombre == entity.Nombre);
         }
 
         public Modelo Save(Modelo entity)
         {
 
-            if (store.GetCollection<Modelo>().InsertOne(entity))
+            if (store.GetCollection<Modelo>(GetCollectionName()).InsertOne(entity))
             {
                 return entity;
             }
 
-            throw new RepositoryException(string.Format("La persistencia de datos del modelo {0} ha fallado.", entity.Name));
+            throw new RepositoryException(string.Format("La persistencia de datos del modelo {0} ha fallado.", entity.Nombre));
         }
 
         public IEnumerable<Modelo> Search(Expression<Func<Modelo, bool>> expression)
         {
-            return store.GetCollection<Modelo>().Find(ConvertExpressionToPredicate(expression));
+            return store.GetCollection<Modelo>(GetCollectionName()).Find(ConvertExpressionToPredicate(expression));
         }
 
         public Modelo Update(Modelo entity)
         {
-            if (store.GetCollection<Modelo>().UpdateOne(modelo => modelo.Name == entity.Name, entity))
+            if (store.GetCollection<Modelo>(GetCollectionName()).UpdateOne(modelo => modelo.Nombre == entity.Nombre, entity))
             {
                 return entity;
             }
 
-            throw new RepositoryException(string.Format("La actualización de datos del modelo {0} ha fallado.", entity.Name));
+            throw new RepositoryException(string.Format("La actualización de datos del modelo {0} ha fallado.", entity.Nombre));
         }
 
         public void Dispose()
@@ -77,6 +79,17 @@ namespace Infraestructura.Impl
         {
             Func<Modelo, bool> func = expression.Compile();
             return t => func(t);
+        }
+
+        private static string GetCollectionName()
+        {
+            JsonObjectAttribute jsonAttribute = typeof(Modelo).GetCustomAttribute(typeof(JsonObjectAttribute)) as JsonObjectAttribute;
+            if (jsonAttribute is null)
+            {
+                return "models";
+            }
+
+            return jsonAttribute.Id;
         }
     }
 }
