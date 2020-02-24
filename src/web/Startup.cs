@@ -26,17 +26,20 @@ namespace WebAPI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            ConnectionStrings con = new ConnectionStrings();
-            Configuration.Bind("ConnectionStrings", con);
-            services.AddSingleton(con);
-
+            ConnectionStrings connection = new ConnectionStrings();
+            Configuration.Bind("ConnectionStrings", connection);
+            services.AddSingleton(connection);
             services.AddControllers();
             services.AddMvc();
             services.Install();
-            services.AddDbContext<CablemodemContext>(o => o.UseInMemoryDatabase(Configuration.GetConnectionString("InMemory")));
+            services.AddDbContext<CablemodemContext>(o => o.UseMySql(Configuration.GetConnectionString("MySQL")));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">The application builder.</param>
+        /// <param name="env">The webhosting environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
