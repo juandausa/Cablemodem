@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebAPI.Models;
+using WebAPI.ViewModels;
 
 namespace WebAPI
 {
@@ -32,7 +32,7 @@ namespace WebAPI
             services.AddControllers();
             services.AddMvc();
             services.Install();
-            services.AddDbContext<CablemodemContext>(o => o.UseMySql(Configuration.GetConnectionString("MySQL")));
+            services.AddDbContext<CablemodemContext>(o => o.UseMySql(connection.MySQL));
         }
 
         /// <summary>

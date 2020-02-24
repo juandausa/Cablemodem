@@ -1,11 +1,11 @@
 ﻿using Infraestructura;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebAPI.Models;
+using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/User")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
