@@ -1,0 +1,16 @@
+{
+  "version": "v1.0",
+  "models": [
+    {
+      "vendor": "Cisco",
+      "name": "DPC3825",
+      "soft": "v1"
+    },
+    {
+      "vendor": "Cisco",
+      "name": "DPC9989",
+      "soft": "v1"
+    }
+  ]
+}
+

@@ -14,20 +14,20 @@ namespace Infraestructura.Test
         [TestMethod]
         public void NoExisteCablemodem_Save_SeGuardaClave()
         {
-            var cablemodemToPersist = CreateEntity();
-            cablemodemToPersist.Ip.Should().NotBeNullOrEmpty();
+            var cablemodemPorPersistir = CreateEntity();
+            cablemodemPorPersistir.Ip.Should().NotBeNullOrEmpty();
         }
 
         [TestMethod]
         public void CablemodemCreado_Search_ObtieneCablemodem()
         {
-            var cablemodemToPersist = CreateEntity();
+            var cablemodemPorPersistir = CreateEntity();
             using (var context = new CablemodemContext(Options))
             {
                 ICablemodemRepository reporitory = new CablemodemRepository(context);
-                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip);
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip);
                 cablemodem.Should().HaveCount(1);
-                this.AreEquals(cablemodemToPersist, cablemodem.First());
+                this.AreEquals(cablemodemPorPersistir, cablemodem.First());
             };
         }
 
@@ -44,11 +44,11 @@ namespace Infraestructura.Test
         [TestMethod]
         public void CablemodemCreado_ActualizarParametro_ObtenerCablemodem_DevuelveParametroActualizado()
         {
-            var cablemodemToPersist = CreateEntity();
+            var cablemodemPorPersistir = CreateEntity();
             using (var context = new CablemodemContext(Options))
             {
                 ICablemodemRepository reporitory = new CablemodemRepository(context);
-                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip).First();
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip).First();
                 cablemodem.Fabricante = "Cisco";
                 reporitory.Update(cablemodem);
             };
@@ -56,7 +56,7 @@ namespace Infraestructura.Test
             using (var context = new CablemodemContext(Options))
             {
                 ICablemodemRepository reporitory = new CablemodemRepository(context);
-                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip).First();
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip).First();
                 cablemodem.Fabricante.Should().Be("Cisco");
             };
         }
@@ -64,18 +64,18 @@ namespace Infraestructura.Test
         [TestMethod]
         public void CablemodemCreado_Borrar_ObtenerCablemodem_NoDevuelveCablemodem()
         {
-            var cablemodemToPersist = CreateEntity();
+            var cablemodemPorPersistir = CreateEntity();
             using (var context = new CablemodemContext(Options))
             {
                 ICablemodemRepository reporitory = new CablemodemRepository(context);
-                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip).First();
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip).First();
                 reporitory.Delete(cablemodem);
             };
 
             using (var context = new CablemodemContext(Options))
             {
                 ICablemodemRepository reporitory = new CablemodemRepository(context);
-                var cablemodem = reporitory.Search(c => c.Ip == cablemodemToPersist.Ip);
+                var cablemodem = reporitory.Search(c => c.Ip == cablemodemPorPersistir.Ip);
                 cablemodem.Should().BeEmpty();
             };
         }

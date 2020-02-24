@@ -13,10 +13,14 @@
 
   <ItemGroup>
     <None Remove="Datos\emptyModels.json" />
+    <None Remove="Datos\testModels.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Datos\emptyModels.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Datos\testModels.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

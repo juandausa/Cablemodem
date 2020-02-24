@@ -5,17 +5,13 @@ namespace Infraestructura
 {
     public class CablemodemContext : DbContext
     {
-        public DbSet<Usuario> User { get; set; }
+        public DbSet<Cablemodem> Cablemodem { get; set; }
         public CablemodemContext(DbContextOptions<CablemodemContext> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuider)
         {
-            modelBuider.Entity<Usuario>()
-                .ToTable("user")
-                .HasKey(k => k.Id);
-
             modelBuider.Entity<Cablemodem>().ToTable("docsis_update");
             modelBuider.Entity<Cablemodem>().Property(c => c.MacAddress).HasColumnName("modem_macaddr");
             modelBuider.Entity<Cablemodem>().HasKey(c => c.MacAddress);
