@@ -19,6 +19,8 @@ namespace WebAPI.Helpers
                 {
                     try
                     {
+                        //// TODO: Obtener desde configuración.
+                        log.LogDebug("Ejecutando seed de base de datos");
                         appContext.Database.BeginTransaction();
                         var commandText = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Datos", "modems.sql"));
                         appContext.Database.ExecuteSqlRaw(commandText);
