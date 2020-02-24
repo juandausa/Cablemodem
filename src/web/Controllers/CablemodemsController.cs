@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
         {
             return await Task.Run(() =>
             {
-                var result = CablemodemRepository.Search(_cablemodem => string.IsNullOrEmpty(Cablemodem.Ip) || _cablemodem.Ip == Cablemodem.Ip);
+                var result = CablemodemRepository.Search(_cablemodem => (string.IsNullOrEmpty(Cablemodem.Ip) || _cablemodem.Ip == Cablemodem.Ip) && string.IsNullOrEmpty(Cablemodem.MacAddress) || _cablemodem.MacAddress == Cablemodem.MacAddress);
                 return Ok(result);
             });
         }
