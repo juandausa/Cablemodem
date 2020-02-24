@@ -33,6 +33,7 @@
     <ProjectReference Include="..\..\Entidades\Entidades.csproj" />
     <ProjectReference Include="..\Infraestructura\Infraestructura.csproj" />
     <ProjectReference Include="..\InyeccionDependencias\InyeccionDependencias.csproj" />
+    <ProjectReference Include="..\Servicios\Servicios.csproj" />
   </ItemGroup>
 
   <ItemGroup>

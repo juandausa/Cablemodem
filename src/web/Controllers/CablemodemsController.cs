@@ -1,5 +1,6 @@
 ﻿using Infraestructura;
 using Microsoft.AspNetCore.Mvc;
+using Servicios;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.ViewModels;
@@ -11,12 +12,12 @@ namespace WebAPI.Controllers
     public class CablemodemsController : ControllerBase
     {
         private readonly ICablemodemRepository cablemodemRepository;
-        private readonly IModeloRepository modeloRepository;
+        private readonly ICablemodemService cablemodemService;
 
-        public CablemodemsController(ICablemodemRepository cablemodemRepository, IModeloRepository modeloRepository)
+        public CablemodemsController(ICablemodemRepository cablemodemRepository, ICablemodemService cablemodemService)
         {
             this.cablemodemRepository = cablemodemRepository;
-            this.modeloRepository = modeloRepository;
+            this.cablemodemService = cablemodemService;
         }
 
         /// <summary>
@@ -42,11 +43,7 @@ namespace WebAPI.Controllers
         {
             return await Task.Run(() =>
             {
-                var cablemodems = cablemodemRepository.Search(cablemodemVerificado => cablemodemVerificado.Fabricante == fabricante);
-                var modelosEnCablemodems = cablemodems.Select(cable => cable.Modelo);
-                var modelos = modeloRepository.Search(modelo => modelo.Fabricante == fabricante && modelosEnCablemodems.Any(mec => mec == modelo.Nombre)).ToList();
-                var cablemodemsVerificados = cablemodems.Where(cable => modelos.Any(modelo => modelo.Nombre == cable.Modelo && modelo.VersionSoftware == cable.VersionSoftware));
-                return Ok(cablemodemsVerificados.Select(cablemodem => new Cablemodem(cablemodem)));
+                return Ok(this.cablemodemService.GetVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem)));
             });
         }
 
@@ -59,11 +56,7 @@ namespace WebAPI.Controllers
         {
             return await Task.Run(() =>
             {
-                var cablemodems = cablemodemRepository.Search(cablemodemVerificado => cablemodemVerificado.Fabricante == fabricante);
-                var modelosEnCablemodems = cablemodems.Select(cable => cable.Modelo);
-                var modelos = modeloRepository.Search(modelo => modelo.Fabricante == fabricante && modelosEnCablemodems.Any(mec => mec == modelo.Nombre)).ToList();
-                var cablemodemsNoVerificados = cablemodems.Where(cable => !modelos.Any(modelo => modelo.Nombre == cable.Modelo && modelo.VersionSoftware == cable.VersionSoftware));
-                return Ok(cablemodemsNoVerificados.Select(cablemodem => new Cablemodem(cablemodem)));
+                return Ok(this.cablemodemService.GetNoVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem)));
             });
         }
     }
