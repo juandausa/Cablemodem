@@ -29,11 +29,19 @@ namespace Web.Controllers.MVC
         [Route("no-verificado", Name = "NoVerificadoFabricante")]
         public ActionResult NoVerificadoFabricante(IFormCollection formFields)
         {
+            // TODO: El framework permite usar modelos.
             var fabricante = formFields["fabricante"].ToString();
-            //if (this.cablemodemService.)
-            var cablemodem = this.cablemodemService.GetNoVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem));
-            ViewBag.Cablemodems = cablemodem;
-            ViewBag.CablemodemsCount = cablemodem.Count();
+            if (cablemodemService.PoseeCablemodemsDelFabricante(fabricante))
+            {
+                var cablemodem = this.cablemodemService.GetNoVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem));
+                ViewBag.Cablemodems = cablemodem;
+                ViewBag.CablemodemsCount = cablemodem.Count();
+            }
+            else
+            {
+                ViewBag.Error = "El fabricante no se encuentra";
+            }
+
             return View("NoVerificado");
         }
 

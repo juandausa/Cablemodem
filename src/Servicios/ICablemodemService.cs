@@ -7,5 +7,6 @@ namespace Servicios
     {
         IEnumerable<Cablemodem> GetNoVerificados(string fabricante = "");
         IEnumerable<Cablemodem> GetVerificados(string fabricante = "");
+        bool PoseeCablemodemsDelFabricante(string fabricante);
     }
 }
