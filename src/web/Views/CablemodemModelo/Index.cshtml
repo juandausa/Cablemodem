@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "Cablemods No verificados";
+}
+
+<h1>Listado de cablemodems no verificados</h1>
+@if (ViewBag.CablemodemsCount == 0)
+{
+    <p>No se han encontrado cablemodems que no esten registrados en la lista de modelos</p>
+}
+else
+{
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>IP </th>
+            <th>Mac Address </th>
+            <th>Modelo </th>
+            <th>Version de Software </th>
+            <th>Acciones </th>
+        </tr>
+        @foreach (var cablemodem in ViewBag.Cablemodems)
+        {
+            <tr>
+                <td>@cablemodem.Ip</td>
+                <td>@cablemodem.MacAddress</td>
+                <td>@cablemodem.Modelo</td>
+                <td>@cablemodem.VersionSoftware</td>
+                <td>Registrar -></td>
+            </tr>
+        }
+    </table>
+
+}

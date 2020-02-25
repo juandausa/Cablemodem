@@ -16,21 +16,18 @@ namespace Web.Controllers.MVC
             this.cablemodemService = cablemodemService;
         }
 
+        [HttpGet("no-verificado")]
         [HttpGet("no-verificado/{fabricante}")]
-        public ActionResult Index(string fabricante)
+        public ActionResult Index(string fabricante = "")
         {
-            ViewBag.Cablemodems = this.cablemodemService.GetNoVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem));
+            var cablemodem = this.cablemodemService.GetNoVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem));
+            ViewBag.Cablemodems = cablemodem;
+            ViewBag.CablemodemsCount = cablemodem.Count();
             return View();
         }
 
         // GET: Cablemodem/Details/5
         public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Cablemodem/Create
-        public ActionResult Create()
         {
             return View();
         }
