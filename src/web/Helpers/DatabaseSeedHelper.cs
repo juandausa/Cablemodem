@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 
-namespace WebAPI.Helpers
+namespace Web.Helpers
 {
     public static class DatabaseSeedHelper
     {

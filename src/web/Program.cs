@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using WebAPI.Helpers;
+using Web.Helpers;
 
-namespace WebAPI
+namespace Web
 {
     public class Program
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace WebAPI.Helpers
+namespace Web.Helpers
 {
     public static class LoggingHelper
     {
