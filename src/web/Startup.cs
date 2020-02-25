@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebAPI.Helpers;
+using Web.Helpers;
 
-namespace WebAPI
+namespace Web
 {
     public class Startup
     {

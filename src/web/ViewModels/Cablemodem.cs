@@ -1,4 +1,4 @@
-﻿namespace WebAPI.ViewModels
+﻿namespace Web.ViewModels
 {
     public class Cablemodem
     {

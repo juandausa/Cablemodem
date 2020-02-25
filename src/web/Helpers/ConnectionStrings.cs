@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Helpers
+﻿namespace Web.Helpers
 {
     public class ConnectionStrings
     {

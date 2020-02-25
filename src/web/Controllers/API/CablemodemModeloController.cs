@@ -1,37 +1,20 @@
-﻿using Infraestructura;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Servicios;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.ViewModels;
+using Web.ViewModels;
 
-namespace WebAPI.Controllers
+namespace Web.Controllers.API
 {
-    [Route("api/cablemodems")]
+    [Route("api/cablemodem-modelo")]
     [ApiController]
-    public class CablemodemsController : ControllerBase
+    public class CablemodemModeloController : ControllerBase
     {
-        private readonly ICablemodemRepository cablemodemRepository;
         private readonly ICablemodemService cablemodemService;
 
-        public CablemodemsController(ICablemodemRepository cablemodemRepository, ICablemodemService cablemodemService)
+        public CablemodemModeloController(ICablemodemService cablemodemService)
         {
-            this.cablemodemRepository = cablemodemRepository;
             this.cablemodemService = cablemodemService;
-        }
-
-        /// <summary>
-        /// Listado Cablemodems
-        /// </summary>
-        /// <returns>Devuelve el listado de cablemodems filtrado</returns>
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] CablemodemFilter cablemodem)
-        {
-            return await Task.Run(() =>
-            {
-                var cablemodems = cablemodemRepository.Search(cable => (string.IsNullOrEmpty(cablemodem.Ip) || cable.Ip == cablemodem.Ip) && string.IsNullOrEmpty(cablemodem.MacAddress) || cable.MacAddress == cablemodem.MacAddress);
-                return Ok(cablemodems);
-            });
         }
 
         /// <summary>
