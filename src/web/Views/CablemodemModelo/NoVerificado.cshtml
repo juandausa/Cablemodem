@@ -6,30 +6,36 @@
 <form asp-controller="Web.Controllers.MVC" asp-action="NoVerificadoFabricante" method="post">
     Fabricante:  <input name="fabricante" id="fabricante"/>&nbsp; <button type="submit">Buscar</button>
 </form>
-@if (ViewBag.CablemodemsCount == 0)
+@if (ViewBag.Error is null)
 {
-    <p>No se han encontrado cablemodems que no esten registrados en la lista de modelos</p>
+    @if (ViewBag.CablemodemsCount == 0)
+    {
+        <p>No se han encontrado cablemodems que no esten registrados en la lista de modelos</p>
+    }
+    else
+    {
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>IP </th>
+                <th>Mac Address </th>
+                <th>Modelo </th>
+                <th>Version de Software </th>
+                <th>Acciones </th>
+            </tr>
+            @foreach (var cablemodem in ViewBag.Cablemodems)
+            {
+                <tr>
+                    <td>@cablemodem.Ip</td>
+                    <td>@cablemodem.MacAddress</td>
+                    <td>@cablemodem.Modelo</td>
+                    <td>@cablemodem.VersionSoftware</td>
+                    <td>Registrar -></td>
+                </tr>
+            }
+        </table>
+    }
 }
 else
 {
-    <table class="table table-bordered table-responsive table-hover">
-        <tr>
-            <th>IP </th>
-            <th>Mac Address </th>
-            <th>Modelo </th>
-            <th>Version de Software </th>
-            <th>Acciones </th>
-        </tr>
-        @foreach (var cablemodem in ViewBag.Cablemodems)
-        {
-            <tr>
-                <td>@cablemodem.Ip</td>
-                <td>@cablemodem.MacAddress</td>
-                <td>@cablemodem.Modelo</td>
-                <td>@cablemodem.VersionSoftware</td>
-                <td>Registrar -></td>
-            </tr>
-        }
-    </table>
-
+    <p>@ViewBag.Error</p>
 }
