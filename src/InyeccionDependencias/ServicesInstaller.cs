@@ -13,6 +13,7 @@ namespace InyeccionDependencias
             serviceCollection.AddScoped<ICablemodemRepository, CablemodemRepository>();
             serviceCollection.AddScoped<IModeloRepository, ModeloRepository>();
             serviceCollection.AddScoped<ICablemodemService, CablemodemService>();
+            serviceCollection.AddScoped<IModeloService, ModeloService>();
         }
     }
 }
