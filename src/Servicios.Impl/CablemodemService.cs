@@ -19,7 +19,7 @@ namespace Servicios.Impl
             this.logger = logger;
         }
 
-        public IEnumerable<Cablemodem> GetNoVerificados(string fabricante)
+        public IEnumerable<Cablemodem> GetNoVerificados(string fabricante = "")
         {
             this.logger.LogDebug("Se ingresa en obtener cablemodems no verificados por el fabricante {0}", fabricante);
             var cablemodems = cablemodemRepository.Search(cablemodemVerificado => string.IsNullOrEmpty(fabricante) || cablemodemVerificado.Fabricante == fabricante);
@@ -28,7 +28,7 @@ namespace Servicios.Impl
             return cablemodems.Where(cable => !modelos.Any(modelo => modelo.Nombre == cable.Modelo && modelo.VersionSoftware == cable.VersionSoftware));
         }
 
-        public IEnumerable<Cablemodem> GetVerificados(string fabricante)
+        public IEnumerable<Cablemodem> GetVerificados(string fabricante = "")
         {
             this.logger.LogDebug("Se ingresa en obtener cablemodems verificados por el fabricante {0}", fabricante);
             var cablemodems = cablemodemRepository.Search(cablemodemVerificado => string.IsNullOrEmpty(fabricante) || cablemodemVerificado.Fabricante == fabricante);
