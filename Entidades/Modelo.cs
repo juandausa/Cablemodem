@@ -5,6 +5,28 @@ namespace Entidades
     [JsonObject("models")]
     public class Modelo
     {
+        public Modelo(string fabricante, string nombre, string versionSoftware)
+        {
+            if (string.IsNullOrWhiteSpace(fabricante))
+            {
+                throw new System.ArgumentException("Fabricante no puede estar en blanco", nameof(fabricante));
+            }
+
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                throw new System.ArgumentException("Nombre no puede estar en blanco", nameof(nombre));
+            }
+
+            if (string.IsNullOrWhiteSpace(versionSoftware))
+            {
+                throw new System.ArgumentException("Version de software no puede estar en blanco", nameof(versionSoftware));
+            }
+
+            Fabricante = fabricante;
+            Nombre = nombre;
+            VersionSoftware = versionSoftware;
+        }
+
         /// <summary>
         /// Fabricante
         /// </summary>
