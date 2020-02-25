@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Servicios;
+using System;
 using System.Linq;
 using Web.ViewModels;
 
@@ -10,18 +11,18 @@ namespace Web.Controllers.MVC
     public class CablemodemModeloController : Controller
     {
         private readonly ICablemodemService cablemodemService;
+        private readonly IModeloService modeloService;
 
-        public CablemodemModeloController(ICablemodemService cablemodemService)
+        public CablemodemModeloController(ICablemodemService cablemodemService, IModeloService modeloService)
         {
             this.cablemodemService = cablemodemService;
+            this.modeloService = modeloService;
         }
 
-        [HttpGet("no-verificado")]
-        public ActionResult NoVerificado()
+        [HttpGet]
+        [Route("", Name = "Index")]
+        public ActionResult Index()
         {
-            var cablemodem = this.cablemodemService.GetNoVerificados().Select(cablemodem => new Cablemodem(cablemodem));
-            ViewBag.Cablemodems = cablemodem;
-            ViewBag.CablemodemsCount = cablemodem.Count();
             return View();
         }
 
@@ -33,9 +34,7 @@ namespace Web.Controllers.MVC
             var fabricante = formFields["fabricante"].ToString();
             if (cablemodemService.PoseeCablemodemsDelFabricante(fabricante))
             {
-                var cablemodem = this.cablemodemService.GetNoVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem));
-                ViewBag.Cablemodems = cablemodem;
-                ViewBag.CablemodemsCount = cablemodem.Count();
+                CargarCablemodems(fabricante);
             }
             else
             {
@@ -45,27 +44,32 @@ namespace Web.Controllers.MVC
             return View("NoVerificado");
         }
 
-        // GET: Cablemodem/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // POST: Cablemodem/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [Route("agregar-modelo", Name = "AgregarModelo")]
+        public ActionResult AgregarModelo(IFormCollection formFields)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(NoVerificado));
+                var fabricante = formFields["fabricante"].ToString();
+                var modelo = formFields["modelo"].ToString();
+                var versionSoftware = formFields["versionSoftware"].ToString();
+                this.modeloService.AgregarModelo(new Entidades.Modelo(fabricante, modelo, versionSoftware));
+                this.CargarCablemodems(fabricante);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
             }
+
+            return View();
+        }
+
+        private void CargarCablemodems(string fabricante = "")
+        {
+            var cablemodem = this.cablemodemService.GetNoVerificados(fabricante).Select(cablemodem => new Cablemodem(cablemodem));
+            ViewBag.Fabricante = fabricante;
+            ViewBag.Cablemodems = cablemodem;
+            ViewBag.CablemodemsCount = cablemodem.Count();
         }
     }
 }

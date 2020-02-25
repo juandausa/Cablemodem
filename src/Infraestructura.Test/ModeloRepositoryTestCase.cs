@@ -110,13 +110,7 @@ namespace Infraestructura.Test
 
         public override Modelo CreateEntity()
         {
-            var modelo = new Modelo()
-            {
-                Nombre = Guid.NewGuid().ToString(),
-                VersionSoftware = "v1.0",
-                Fabricante = "Cisco"
-            };
-
+            var modelo = new Modelo("Cisco", Guid.NewGuid().ToString(), "v1.0");
             var repository = new ModeloRepository(AppSettings, Logger);
             return repository.Save(modelo);
         }
