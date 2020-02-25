@@ -1,9 +1,11 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Cablemods No verificados";
 }
 
 <h1>Listado de cablemodems no verificados</h1>
+<form asp-controller="Web.Controllers.MVC" asp-action="NoVerificadoFabricante" method="post">
+    Fabricante:  <input name="fabricante" id="fabricante"/>&nbsp; <button type="submit">Buscar</button>
+</form>
 @if (ViewBag.CablemodemsCount == 0)
 {
     <p>No se han encontrado cablemodems que no esten registrados en la lista de modelos</p>
