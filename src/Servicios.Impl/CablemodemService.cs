@@ -36,5 +36,15 @@ namespace Servicios.Impl
             var modelos = modeloRepository.Search(modelo => modelo.Fabricante == fabricante && modelosEnCablemodems.Any(mec => mec == modelo.Nombre)).ToList();
             return cablemodems.Where(cable => modelos.Any(modelo => modelo.Nombre == cable.Modelo && modelo.VersionSoftware == cable.VersionSoftware));
         }
+
+        public bool PoseeCablemodemsDelFabricante(string fabricante)
+        {
+            if (string.IsNullOrWhiteSpace(fabricante))
+            {
+                throw new System.ArgumentException("El fabricante debe especificarse", nameof(fabricante));
+            }
+
+            return this.cablemodemRepository.Any(cable => cable.Fabricante == fabricante);
+        }
     }
 }
