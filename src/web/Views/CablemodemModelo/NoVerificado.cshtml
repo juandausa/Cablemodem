@@ -3,12 +3,14 @@
 }
 
 <h1>Listado de cablemodems no verificados</h1>
+<br />
 <partial name="_Buscar" />
+<br />
 @if (ViewBag.Error is null)
 {
     @if (ViewBag.CablemodemsCount == 0)
     {
-        <p>No se han encontrado cablemodems que no esten registrados en la lista de modelos</p>
+        <h4 class="text-black-50">No se han encontrado cablemodems que no esten registrados en la lista de modelos</h4>
     }
     else
     {
@@ -17,5 +19,5 @@
 }
 else
 {
-    <p>@ViewBag.Error</p>
+    <h6 class="text-black-50">@ViewBag.Error</h6>
 }
