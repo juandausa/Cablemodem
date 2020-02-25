@@ -1,9 +1,9 @@
 ﻿using Infraestructura;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebAPI.ViewModels;
+using Web.ViewModels;
 
-namespace WebAPI.Controllers
+namespace Web.Controllers.API
 {
     [Route("api/modelos")]
     [ApiController]
