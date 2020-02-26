@@ -19,9 +19,9 @@
                 <td>
                     <form asp-controller="Web.Controllers.MVC" asp-action="NoVerificadoFabricante" method="post">
                         <div style="display: none;">
-                            <input name="fabricante" id="fabricante" value="@ViewBag.Fabricante" />
-                            <input name="modelo" id="modelo" value="@cablemodem.Modelo" />
-                            <input name="versionSoftware" id="versionSoftware" value="@cablemodem.VersionSoftware" />
+                            <input name="fabricante" value="@ViewBag.Fabricante" />
+                            <input name="modelo" value="@cablemodem.Modelo" />
+                            <input name="versionSoftware" value="@cablemodem.VersionSoftware" />
                         </div>
                         <button type="submit" class="btn btn-primary" asp-route="AgregarModelo">Registrar +</button>
                     </form>
