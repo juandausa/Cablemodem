@@ -1,32 +1,41 @@
-﻿<table class="table table-bordered table-responsive table-hover">
-    <thead>
-        <tr>
-            <th>IP </th>
-            <th>Mac Address </th>
-            <th>Modelo </th>
-            <th>Version de Software </th>
-            <th>Acciones </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var cablemodem in ViewBag.Cablemodems)
-        {
+﻿@if (ViewBag.CablemodemsCount == 0)
+{
+    <h5 class="text-black-50">No se han encontrado cablemodems que no esten registrados en la lista de modelos para el fabricante @ViewBag.Fabricante</h5>
+}
+else
+{
+    <h5 class="text-muted">Mostrando cablemodems para el fabricante @ViewBag.Fabricante</h5>
+    <br />
+    <table class="table table-bordered table-responsive table-hover">
+        <thead>
             <tr>
-                <td>@cablemodem.Ip</td>
-                <td>@cablemodem.MacAddress</td>
-                <td>@cablemodem.Modelo</td>
-                <td>@cablemodem.VersionSoftware</td>
-                <td>
-                    <form asp-controller="Web.Controllers.MVC" asp-action="NoVerificadoFabricante" method="post">
-                        <div style="display: none;">
-                            <input name="fabricante" value="@ViewBag.Fabricante" />
-                            <input name="modelo" value="@cablemodem.Modelo" />
-                            <input name="versionSoftware" value="@cablemodem.VersionSoftware" />
-                        </div>
-                        <button type="submit" class="btn btn-primary" asp-route="AgregarModelo">Registrar +</button>
-                    </form>
-                </td>
+                <th>IP </th>
+                <th>Mac Address </th>
+                <th>Modelo </th>
+                <th>Version de Software </th>
+                <th>Acciones </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var cablemodem in ViewBag.Cablemodems)
+            {
+                <tr>
+                    <td>@cablemodem.Ip</td>
+                    <td>@cablemodem.MacAddress</td>
+                    <td>@cablemodem.Modelo</td>
+                    <td>@cablemodem.VersionSoftware</td>
+                    <td>
+                        <form asp-controller="Web.Controllers.MVC" asp-action="NoVerificadoFabricante" method="post">
+                            <div style="display: none;">
+                                <input name="fabricante" value="@ViewBag.Fabricante" />
+                                <input name="modelo" value="@cablemodem.Modelo" />
+                                <input name="versionSoftware" value="@cablemodem.VersionSoftware" />
+                            </div>
+                            <button type="submit" class="btn btn-primary" asp-route="AgregarModelo">Registrar +</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
