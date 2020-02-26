@@ -2,6 +2,22 @@
 {
     public class Cablemodem
     {
+        public Cablemodem(string macAddress, string ip)
+        {
+            if (string.IsNullOrWhiteSpace(macAddress))
+            {
+                throw new System.ArgumentException("Mac address no puede estar vacio", nameof(macAddress));
+            }
+
+            if (string.IsNullOrWhiteSpace(ip))
+            {
+                throw new System.ArgumentException("Ip no puede estar vacio", nameof(ip));
+            }
+
+            MacAddress = macAddress;
+            Ip = ip;
+        }
+
         /// <summary>
         /// MAC address del cablemódem.
         /// </summary>
