@@ -43,11 +43,11 @@ namespace Servicios.Impl
             return this.cablemodemRepository.Any(cable => cable.Fabricante == fabricante);
         }
 
-        private void GetModelosCablemodem(string fabricante, out IEnumerable<Cablemodem> cablemodems, out List<Modelo> modelos)
+        protected virtual void GetModelosCablemodem(string fabricante, out IEnumerable<Cablemodem> cablemodems, out List<Modelo> modelos)
         {
             cablemodems = cablemodemRepository.Search(cablemodemVerificado => string.IsNullOrEmpty(fabricante) || cablemodemVerificado.Fabricante == fabricante);
             var modelosEnCablemodems = cablemodems.Select(cable => cable.Modelo);
-            modelos = modeloRepository.Search(modelo => modelo.Fabricante == fabricante && modelosEnCablemodems.Any(mec => mec == modelo.Nombre)).ToList();
+            modelos = modeloRepository.Search(modelo => modelo.Fabricante == fabricante && modelosEnCablemodems.Any(modeloEnCablemodem => modeloEnCablemodem == modelo.Nombre)).ToList();
         }
     }
 }
