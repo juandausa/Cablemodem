@@ -90,12 +90,23 @@ namespace Infraestructura.Test
             };
         }
 
+        [TestMethod]
+        public void CablemodemCreado_SearchByFabricante_DevuelveCablemodem()
+        {
+            var cablemodemPorPersistir = CreateEntity();
+            using (var context = new CablemodemContext(Options))
+            {
+                ICablemodemRepository reporitory = new CablemodemRepository(context, Logger);
+                var cablemodem = reporitory.Search(c => c.Fabricante == cablemodemPorPersistir.Fabricante);
+                cablemodem.Should().HaveCount(1);
+                this.AreEquals(cablemodemPorPersistir, cablemodem.First());
+            };
+        }
+
         public override Cablemodem CreateEntity()
         {
-            var cablemodem = new Cablemodem()
+            var cablemodem = new Cablemodem("91:75:1a:ec:9a:c7", "1.2.3.4")
             {
-                Ip = "1.2.3.4",
-                MacAddress = "91:75:1a:ec:9a:c7",
                 Fabricante = "Moto",
                 Modelo = "modelo",
                 VersionSoftware = "1.1.1"

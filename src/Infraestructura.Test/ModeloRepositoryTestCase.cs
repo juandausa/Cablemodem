@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -47,7 +48,7 @@ namespace Infraestructura.Test
         }
 
         [TestMethod]
-        public void ModeloCreado_ActualizarParametro_ObtenerModelo_DevuelveParametroActualizado()
+        public void ModeloCreado_ActualizarParametro_SaerchByNombre_DevuelveParametroActualizado()
         {
             var modeloPorPersistir = CreateEntity();
             const string valorActualizado = "v2.0";
@@ -66,7 +67,7 @@ namespace Infraestructura.Test
         }
 
         [TestMethod]
-        public void ModeloCreado_Borrar_ObtenerModelo_NoDevuelveModelo()
+        public void ModeloCreado_Borrar_SaerchByNombre_NoDevuelveModelo()
         {
             var modeloPorPersistir = CreateEntity();
             using (var repository = new ModeloRepository(AppSettings, Logger))
@@ -82,7 +83,7 @@ namespace Infraestructura.Test
         }
 
         [TestMethod]
-        public void ModeloInexistente_ObtenerModelo_NoDevuelveModelo()
+        public void ModeloInexistente_SaerchByNombre_NoDevuelveModelo()
         {
             using (var repository = new ModeloRepository(AppSettings, Logger))
             {
@@ -91,7 +92,7 @@ namespace Infraestructura.Test
         }
 
         [TestMethod]
-        public void ModeloCreadoEnArchivoEjemplo_ObtenerModelo_DevuelveModelo()
+        public void ModeloCreadoEnArchivoEjemplo_SaerchByNombre_DevuelveModelo()
         {
             Mock<IAppSettings> appSettings = CreateTestModelAppSettings();
             using var repository = new ModeloRepository(appSettings.Object, Logger);
@@ -100,13 +101,23 @@ namespace Infraestructura.Test
         }
 
         [TestMethod]
-        public void ModeloInexistenteEnArchivoEjemplo_ObtenerModelo_NoDevuelveModelo()
+        public void ModeloInexistenteEnArchivoEjemplo_SaerchByNombre_NoDevuelveModelo()
         {
             Mock<IAppSettings> appSettings = CreateTestModelAppSettings();
             using var repository = new ModeloRepository(appSettings.Object, Logger);
             repository.Search(m => m.Nombre == "DPC381125").Should().BeEmpty();
         }
 
+        [TestMethod]
+        public void ModeloExistenteEnArchivoEjemplo_SaerchByFabricanteAndContainsNombre_DevuelveModelo()
+        {
+            Mock<IAppSettings> appSettings = CreateTestModelAppSettings();
+            using var repository = new ModeloRepository(appSettings.Object, Logger);
+            var coleccionModelos = new List<string>() { "DPC3825" };
+            repository.Search(m => m.Fabricante == "Cisco" && coleccionModelos.Contains(m.Nombre)).Should().HaveCount(1);
+            repository.Search(m => m.Fabricante == "Cisco" && coleccionModelos.Contains(m.Nombre)).First().Fabricante.Should().Be("Cisco");
+            repository.Search(m => m.Fabricante == "Cisco" && coleccionModelos.Contains(m.Nombre)).First().Nombre.Should().Be("DPC3825");
+        }
 
         public override Modelo CreateEntity()
         {
