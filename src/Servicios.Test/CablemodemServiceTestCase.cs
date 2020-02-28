@@ -50,8 +50,9 @@ namespace Servicios.Test
         {
             var fabricante = "Moto";
             var cablemodems = CreateCablemodems(fabricante);
-            this.MockCablemodemRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Cablemodem, bool>>>())).Returns(cablemodems);
+            this.SetupCablemodemRepository(cablemodems);
             this.MockModeloRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Modelo, bool>>>())).Returns(new List<Modelo>());
+
             IEnumerable<Cablemodem> enumerable = this.CablemodemService.GetNoVerificados(fabricante);
             enumerable.Should().HaveCount(1);
             enumerable.Should().Contain(cablemodems.First());
@@ -61,21 +62,27 @@ namespace Servicios.Test
         public void CablemodemsDelFabricanteSinRegistrarMismaVersionSoftware_GetNoVerificados_DevuelveCablemodem()
         {
             var fabricante = "Moto";
-            var cablemodems = CreateCablemodems(fabricante);
-            this.MockCablemodemRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Cablemodem, bool>>>())).Returns(cablemodems);
-            this.MockModeloRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Modelo, bool>>>())).Returns(new List<Modelo>() { new Modelo(cablemodems.First().Fabricante, cablemodems.First().Modelo, "0.1") });
+            var modelo = "modelo";
+            var cablemodems = CreateCablemodems(fabricante, modelo);
+            var modelos = CreateModelos(fabricante, modelo, "otraversion");
+            this.SetupCablemodemRepository(cablemodems);
+            this.SetupModeloRepository(modelos);
+
             IEnumerable<Cablemodem> enumerable = this.CablemodemService.GetNoVerificados(fabricante);
             enumerable.Should().HaveCount(1);
             enumerable.Should().Contain(cablemodems.First());
         }
 
         [TestMethod]
-        public void CablemodemsDelFabricanteRegistrado_GetNoVerificados_DevuelveCablemodem()
+        public void CablemodemsDelFabricanteRegistrado_GetNoVerificados_NoDevuelveCablemodem()
         {
             var fabricante = "Moto";
-            var cablemodems = CreateCablemodems(fabricante);
-            this.MockCablemodemRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Cablemodem, bool>>>())).Returns(cablemodems);
-            this.MockModeloRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Modelo, bool>>>())).Returns(new List<Modelo>() { new Modelo(cablemodems.First().Fabricante, cablemodems.First().Modelo, cablemodems.First().VersionSoftware) });
+            var modelo = "modelo";
+            var software = "1.0.1";
+            var cablemodems = CreateCablemodems(fabricante, modelo, software);
+            var modelos = CreateModelos(fabricante, modelo, software);
+            this.SetupCablemodemRepository(cablemodems);
+            this.SetupModeloRepository(modelos);
             IEnumerable<Cablemodem> enumerable = this.CablemodemService.GetNoVerificados(fabricante);
             enumerable.Should().HaveCount(0);
         }
@@ -83,45 +90,72 @@ namespace Servicios.Test
         [TestMethod]
         public void CablemodemsDelFabricanteRegistrados_GetVerificados_DevuelveCablemodem()
         {
-            var fabricante = "Moto";
+            var fabricante = "Cisco";
             var cablemodems = CreateCablemodems(fabricante);
-            this.MockCablemodemRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Cablemodem, bool>>>())).Returns(cablemodems);
-            this.MockModeloRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Modelo, bool>>>())).Returns(new List<Modelo> { new Modelo(cablemodems.First().Fabricante, cablemodems.First().Modelo, cablemodems.First().VersionSoftware) });
+            var modelos = CreateModelos(fabricante);
+            this.SetupCablemodemRepository(cablemodems);
+            this.SetupModeloRepository(modelos);
             IEnumerable<Cablemodem> enumerable = this.CablemodemService.GetVerificados(fabricante);
             enumerable.Should().HaveCount(1);
             enumerable.Should().Contain(cablemodems.First());
         }
 
         [TestMethod]
-        public void VariosCablemodemsDelFabricanteRegistrados_GetVerificados_DevuelveCablemodem()
+        public void VariosCablemodemsDelFabricanteRegistrados_GetVerificados_DevuelveCablemodemMismoModelo()
         {
-            var fabricante = "Cisco";
-            var cablemodems = CreateCablemodems(fabricante);
+            var fabricante = "Moto";
+            var modelo = "modelo";
+            var software = "1.0.1";
+            var cablemodems = CreateCablemodems(fabricante, modelo, software);
+            var modelos = CreateModelos(fabricante, modelo, software);
+            this.SetupCablemodemRepository(cablemodems);
+            this.SetupModeloRepository(modelos);
             var cablemodem = new Cablemodem("91:75:1a:ec:9a:c8", "1.2.3.5")
             {
                 Fabricante = fabricante,
                 Modelo = "otroModelo",
-                VersionSoftware = "1.1.1"
+                VersionSoftware = software
             };
-            this.MockCablemodemRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Cablemodem, bool>>>())).Returns(cablemodems);
-            this.MockModeloRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Modelo, bool>>>())).Returns(new List<Modelo> { new Modelo(cablemodems.First().Fabricante, cablemodems.First().Modelo, cablemodems.First().VersionSoftware) });
+            
             IEnumerable<Cablemodem> enumerable = this.CablemodemService.GetVerificados(fabricante);
             enumerable.Should().HaveCount(1);
             enumerable.Should().Contain(cablemodems.First());
         }
 
-        public IEnumerable<Cablemodem> CreateCablemodems(string fabricante = "Moto")
+        private IEnumerable<Modelo> CreateModelos(string fabricante = "Moto", string modelo = "modelo", string versionSoftware = "1.1.1")
+        {
+            return new List<Modelo>() { new Modelo(fabricante, modelo, versionSoftware) };
+        }
+
+        public IEnumerable<Cablemodem> CreateCablemodems(string fabricante = "Moto", string modelo = "modelo", string versionSoftware = "1.1.1")
         {
             var cablemodems = new List<Cablemodem>();
             var cablemodem = new Cablemodem("91:75:1a:ec:9a:c7", "1.2.3.4")
             {
                 Fabricante = fabricante,
-                Modelo = "modelo",
-                VersionSoftware = "1.1.1"
+                Modelo = modelo,
+                VersionSoftware = versionSoftware
             };
 
             cablemodems.Add(cablemodem);
             return cablemodems;
+        }
+
+        private void SetupCablemodemRepository(IEnumerable<Cablemodem> cablemodems)
+        {
+            this.MockCablemodemRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Cablemodem, bool>>>())).Returns((Expression<Func<Cablemodem, bool>> expression) =>
+            {
+                Func<Cablemodem, bool> predicate = expression.Compile();
+                return cablemodems.Where(cable => predicate(cable));
+            });
+        }
+        private void SetupModeloRepository(IEnumerable<Modelo> modelos)
+        {
+            this.MockModeloRepository.Setup(mock => mock.Search(It.IsAny<Expression<Func<Modelo, bool>>>())).Returns((Expression<Func<Modelo, bool>> expression) =>
+            {
+                Func<Modelo, bool> predicate = expression.Compile();
+                return modelos.Where(cable => predicate(cable));
+            });
         }
     }
 }
