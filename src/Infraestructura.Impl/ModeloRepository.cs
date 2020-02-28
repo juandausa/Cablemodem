@@ -91,8 +91,7 @@ namespace Infraestructura.Impl
 
         private static string GetCollectionName()
         {
-            JsonObjectAttribute jsonAttribute = typeof(Modelo).GetCustomAttribute(typeof(JsonObjectAttribute)) as JsonObjectAttribute;
-            if (jsonAttribute is null)
+            if (!(typeof(Modelo).GetCustomAttribute(typeof(JsonObjectAttribute)) is JsonObjectAttribute jsonAttribute))
             {
                 return "models";
             }
