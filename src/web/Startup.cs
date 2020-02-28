@@ -51,6 +51,7 @@ namespace Web
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseStaticFiles();
+            app.UseErrorLoggingMiddleware();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
