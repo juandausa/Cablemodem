@@ -39,8 +39,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Entidades\Entidades.csproj" />
     <ProjectReference Include="..\Base.Test\Base.Test.csproj" />
+    <ProjectReference Include="..\Entidades\Entidades.csproj" />
     <ProjectReference Include="..\Infraestructura.Impl\Infraestructura.Impl.csproj" />
     <ProjectReference Include="..\Infraestructura\Infraestructura.csproj" />
   </ItemGroup>
