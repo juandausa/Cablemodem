@@ -16,21 +16,19 @@ namespace Web.Helpers
             {
                 var log = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
                 var appSettings = scope.ServiceProvider.GetRequiredService<IAppSettings>();
-                using (var appContext = scope.ServiceProvider.GetRequiredService<CablemodemContext>())
+                using var appContext = scope.ServiceProvider.GetRequiredService<CablemodemContext>();
+                try
                 {
-                    try
-                    {
-                        log.LogDebug("Ejecutando seed de base de datos");
-                        appContext.Database.BeginTransaction();
-                        var commandText = File.ReadAllText(appSettings.SqlSeedFilePath);
-                        appContext.Database.ExecuteSqlRaw(commandText);
-                        appContext.Database.CommitTransaction();
-                    }
-                    catch (Exception ex)
-                    {
-                        log.LogError("Se produjo un error al ejecutar el seed de base de datos", ex);
-                        throw;
-                    }
+                    log.LogDebug("Ejecutando seed de base de datos");
+                    appContext.Database.BeginTransaction();
+                    var commandText = File.ReadAllText(appSettings.SqlSeedFilePath);
+                    appContext.Database.ExecuteSqlRaw(commandText);
+                    appContext.Database.CommitTransaction();
+                }
+                catch (Exception ex)
+                {
+                    log.LogError("Se produjo un error al ejecutar el seed de base de datos", ex);
+                    throw;
                 }
             }
 
