@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "NetCore3Web": {
+    "Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
