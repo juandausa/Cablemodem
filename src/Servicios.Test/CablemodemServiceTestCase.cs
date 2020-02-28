@@ -70,7 +70,7 @@ namespace Servicios.Test
         }
 
         [TestMethod]
-        public void CablemodemsDelFabricanteRegistrar_GetNoVerificados_DevuelveCablemodem()
+        public void CablemodemsDelFabricanteRegistrado_GetNoVerificados_DevuelveCablemodem()
         {
             var fabricante = "Moto";
             var cablemodems = CreateCablemodems(fabricante);
