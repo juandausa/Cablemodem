@@ -3,7 +3,8 @@
 
 # Requisitos
 - SDK Net Core [3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1).
-- Motor de base de datos MySQL. Puede encontrar la configuración de la instancia en el proyecto sobre el archivo src/web/appsettings.json.
+- Motor de base de datos MariaDB (10.4.x). Puede encontrar la configuración de la instancia en el proyecto sobre el archivo src/web/appsettings.json.
+- Se incluye de forma opcional una imagen de docker lista para usar de MariaDB dentro de la carpeta src/Docker. Para su uso se necesita [docker](https://www.docker.com) y [docker-compose](https://www.docker.com).
 
 # Iniciar proyecto
 - Una vez instalado el sdk y el motor de base de datos se necesita:
