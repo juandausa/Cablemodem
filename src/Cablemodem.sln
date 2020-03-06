@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "web\Web.csproj", "{697C37A3-1E98-4CB9-8AE8-AFA8FE7186D8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infraestructura", "Infraestructura\Infraestructura.csproj", "{A3A0B52C-1365-4BE2-BB9B-BB0E3928D197}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infraestructura.Impl", "Infraestructura.Impl\Infraestructura.Impl.csproj", "{FBE56730-6824-4045-B333-AD9A377C5CCC}"
@@ -22,6 +20,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Servicios.Test", "Servicios.Test\Servicios.Test.csproj", "{F2801F63-15DF-4C27-A7AC-FC613285596C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entidades", "Entidades\Entidades.csproj", "{8F5CE8C4-0FEC-4CCB-8421-64D8C874FD26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{5036ADB0-AAC5-47AA-BE6A-BE3F2E94D34E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
